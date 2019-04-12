@@ -57,102 +57,49 @@ more complex `PL/PgSQL` scripts.
 
 Start pgAdmin 4. You will first want to connect to your database, or “Add a server” to this browser. 
 
-
-
-<p id="gdcalert1" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to screenshots/postgis00.png). Store image on your image server and adjust path/filename if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert2">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
 ![alt_text](screenshots/postgis01.png "image_tooltip")
-
 
 Name it localhost and switch to the “Connection” tab. 
 
-
-
-<p id="gdcalert2" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to screenshots/postgis01.png). Store image on your image server and adjust path/filename if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert3">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
 ![alt_text](screenshots/postgis02.png "image_tooltip")
-
 
 In the connection tab, enter the host as localhost, the port as 5432, and the username and password as postgres and postgres. 
 
-
-
-<p id="gdcalert3" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to screenshots/postgis02.png). Store image on your image server and adjust path/filename if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert4">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
 ![alt_text](screenshots/postgis03.png "image_tooltip")
-
 
 Click Save. Next, create a new database, just for our geospatial stuff.
 
-
-
-<p id="gdcalert4" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to screenshots/postgis03.png). Store image on your image server and adjust path/filename if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert5">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
 ![alt_text](screenshots/postgis04.png "image_tooltip")
-
 
 Name it gist604b and Save it.
 
-
-
-<p id="gdcalert5" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to screenshots/postgis04.png). Store image on your image server and adjust path/filename if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert6">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
 ![alt_text](screenshots/postgis05.png "image_tooltip")
 
-
 The database will initially be marked with a red “x” because we are not actually connected. Click on the “+” next to your new database to connect to it. Spend a few minutes exploring the database.
-
 
 ### Query tool
 
 Next, open the Query Tool. It is accessible from the lightning icon above the list of Servers in the left-hand pane.
 
-
-
-<p id="gdcalert6" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to screenshots/postgis05.png). Store image on your image server and adjust path/filename if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert7">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
 ![alt_text](screenshots/postgis06.png "image_tooltip")
 
-
 So far the database you created is just a plain old postgresql database without any fancy geospatial capabilities. We need to install the `postgis `extension. In your query tool editor, enter:
-
 
 ```
 CREATE EXTENSION postgis;
 ```
 
-
 And then click the lightning icon inside the Query Tool to execute the SQL.
 
-
-
-<p id="gdcalert7" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to screenshots/postgis06.png). Store image on your image server and adjust path/filename if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert8">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
 ![alt_text](screenshots/postgis07.png "image_tooltip")
- 
-
-
-
-<p id="gdcalert8" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to screenshots/postgis07.png). Store image on your image server and adjust path/filename if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert9">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
 
 ![alt_text](screenshots/postgis08.png "image_tooltip")
 
-
 In the SQL editor, enter the following:
-
 
 ```
 select postgis_full_version();
 ```
-
 
 The result will be in a single cell. If you copy the contents of the cell and paste it in Notepad++ it should look something like this:
 
@@ -177,11 +124,6 @@ shp2pgsql -s 2868 Subdivisions__Open_Data subdivisions > Subdivisions__Open_Data
 ```
 
 
-
-
-<p id="gdcalert9" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to screenshots/postgis08.png). Store image on your image server and adjust path/filename if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert10">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
 ![alt_text](screenshots/postgis09.png "image_tooltip")
 
 
@@ -196,28 +138,16 @@ psql -d gist604b -h localhost -U postgres -f Subdivisions__Open_Data.sql
 Open pgAdmin 4  and look at the table that was just created. 
 
 
-
-<p id="gdcalert10" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to screenshots/postgis09.png). Store image on your image server and adjust path/filename if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert11">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
 ![alt_text](screenshots/postgis10.png "image_tooltip")
 
 
 Next, enable the extension for this particular database:
 
 
-
-<p id="gdcalert11" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to screenshots/postgis010.png). Store image on your image server and adjust path/filename if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert12">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
 ![alt_text](screenshots/postgis11.png "image_tooltip")
 
 
 Right click on the table and make the selection to view the first few records in the database. Look at the column names and types. Is this similar to what you saw in the .sql file earlier?
-
-
-
-<p id="gdcalert12" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to screenshots/postgis011.png). Store image on your image server and adjust path/filename if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert13">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
 
 
 ![alt_text](screenshots/postgis12.png "image_tooltip")
@@ -229,28 +159,16 @@ Right click on the table and make the selection to view the first few records in
 Open GGIS and select the “Layer -> Add PostGIS Layers” option. 
 
 
-
-<p id="gdcalert13" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to screenshots/postgis012.png). Store image on your image server and adjust path/filename if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert14">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
 ![alt_text](screenshots/postgis13.png "image_tooltip")
 
 
 Enter the correct information for your installation, then Test the connection. If ok, click “Ok”
 
 
-
-<p id="gdcalert14" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to screenshots/postgis013.png). Store image on your image server and adjust path/filename if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert15">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
 ![alt_text](screenshots/postgis14.png "image_tooltip")
 
 
 Pick your PostGIS Layer and add it to the map. Interact with the data, changing the symbology and looking at the attribute table.
-
-
-
-<p id="gdcalert15" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to screenshots/postgis014.png). Store image on your image server and adjust path/filename if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert16">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
 
 
 ![alt_text](screenshots/postgis15.png "image_tooltip")
@@ -291,11 +209,6 @@ for /F %i in ('dir /B *.shp') do shp2pgsql -s 4326 %i %~ni > %~ni.sql
 ```
 
 
-
-
-<p id="gdcalert16" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to screenshots/postgis015.png). Store image on your image server and adjust path/filename if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert17">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
 ![alt_text](screenshots/postgis015.png "image_tooltip")
 
 
@@ -305,10 +218,6 @@ for /F %i in ('dir /B *.shp') do shp2pgsql -s 4326 %i %~ni > %~ni.sql
 **Screenshot showing output of the shp2pgsql output or a full list of the commands used**
 
 Look in Windows explorer and confirm the SQL files have been created.
-
-
-
-<p id="gdcalert17" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to screenshots/postgis016.png). Store image on your image server and adjust path/filename if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert18">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
 
 
 ![alt_text](screenshots/postgis17.png "image_tooltip")
@@ -327,12 +236,7 @@ for /F %i in ('dir /B *.sql') do psql -d gist604b -h localhost -U postgres -f %i
 The commands will look like this:
 
 
-
-<p id="gdcalert18" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to screenshots/postgis017.png). Store image on your image server and adjust path/filename if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert19">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
 ![alt_text](screenshots/postgis18.png "image_tooltip")
-
 
 
 ### NOTE ASSIGNMENT DELIVERABLE #2
@@ -363,9 +267,6 @@ Do this for all the OSM layers. I didn’t do it for the rest of this tutorial b
 
 #### 
 
-<p id="gdcalert19" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to screenshots/postgis018.png). Store image on your image server and adjust path/filename if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert20">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
 ![alt_text](screenshots/postgis19.png "image_tooltip")
 
 
@@ -384,4 +285,3 @@ The deliverables for the assignment will be:
 4. Screenshot of geoserver UI showing the list of osm layers
 5. Screenshot of a WMS request against the LayerGroup
 
-<!-- Docs to Markdown version 1.0β17 -->
