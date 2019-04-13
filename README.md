@@ -22,8 +22,8 @@ potential many different extensions and customizations, a number of companies an
 own copy of PostgreSQL and/or make them available via different tools. The official pages for both are at listed below
 though I do recommend two different options for Windows and Mac users:
 
-- PostreSQL: https://www.postgresql.org/docs/current/tutorial-install.html
-- PostGIS: https://postgis.net/install/
+- PostreSQL: https://www.postgresql.org
+- PostGIS: https://postgis.net
 
 ## Install pgAdmin 
 Download and install pgAdmin from https://www.pgadmin.org/download/
