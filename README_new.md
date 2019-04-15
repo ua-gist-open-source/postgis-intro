@@ -52,23 +52,23 @@ past the first few sections. These exercises are basically cookbook recipes to g
 queries and answering the kinds of spatial questions you want to ask as a GIS professional. In Part 1 of this unit we will 
 work our way through Sections 1 through 14, sipping Section 3, since we already installed Postgresql and PostGIS.
 
-[http://postgis.net/workshops/postgis-intro/](http://postgis.net/workshops/postgis-intro/)
+[http://postgis.net/workshops/postgis-intro/](https://github.com/ua-gist415-master/postgis-workshops/blob/master/postgis-intro/sources/en/index.rst)
 
-#### [1. Welcome](https://github.com/postgis/postgis-workshops/tree/master/postgis-intro/sources/en/welcome.rst)
-#### [2. Introduction](https://github.com/postgis/postgis-workshops/tree/master/postgis-intro/sources/en/introduction.rst)
+#### [1. Welcome](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/welcome.rst)
+#### [2. Introduction](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/introduction.rst)
 #### 3. SKIP (You already did this)
-#### [4. Creating a Spatial Database](https://github.com/postgis/postgis-workshops/tree/master/postgis-intro/sources/en/creating_db.rst)
-#### [5. Loading spatial data](https://github.com/postgis/postgis-workshops/tree/master/postgis-intro/sources/en/loading_data.rst)
-#### [6. About our data](https://github.com/postgis/postgis-workshops/tree/master/postgis-intro/sources/en/about_data.rst)
-#### [7. Simple SQL](https://github.com/postgis/postgis-workshops/tree/master/postgis-intro/sources/en/simple_sql.rst)
-#### [8. Simple SQL Exercises](https://github.com/postgis/postgis-workshops/tree/master/postgis-intro/sources/en/simple_sql_exercises.rst)
+#### [4. Creating a Spatial Database](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/creating_db.rst)
+#### [5. Loading spatial data](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/loading_data.rst)
+#### [6. About our data](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/about_data.rst)
+#### [7. Simple SQL](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/simple_sql.rst)
+#### [8. Simple SQL Exercises](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/simple_sql_exercises.rst)
 
 - What is the *Asian* population of the City of New York?
 - What is the population of *Manhattan*?
 - For each borough, what percentage of the population is *black*?
 
-#### [9. Geometries](https://github.com/postgis/postgis-workshops/tree/master/postgis-intro/sources/en/geometries.rst)
-#### [10. Geometry Exercises](https://github.com/postgis/postgis-workshops/tree/master/postgis-intro/sources/en/geometries_exercises.rst)
+#### [9. Geometries](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/geometries.rst)
+#### [10. Geometry Exercises](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/geometries_exercises.rst)
 - What is the area of the *‘New Brighton’* neighborhood?
 - What is the area of the *Bronx* in acres?
 - How many census blocks in New York City *DO NOT* have a hole in them?
@@ -78,15 +78,15 @@ work our way through Sections 1 through 14, sipping Section 3, since we already 
 - How many polygons are in the ‘Coney Island’ multipolygon?
 - What are the 5 longest roads in NYC?
 
-#### [11. Spatial Relationships](https://github.com/postgis/postgis-workshops/tree/master/postgis-intro/sources/en/spatial_relationships.rst)
-#### [12. Spatial Relationships Exercises](https://github.com/postgis/postgis-workshops/tree/master/postgis-intro/sources/en/spatial_relationships_exercises.rst)
+#### [11. Spatial Relationships](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/spatial_relationships.rst)
+#### [12. Spatial Relationships Exercises](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/spatial_relationships_exercises.rst)
 - What is the geometry value for the street named ‘S Oxford St’?
 - What neighborhood and borough is S Oxford St in?
 - What streets does S Oxford St join with?
 - Approximately how many people live on (within 50 meters of) S Oxford St?
 
-#### [13. Spatial Joins](https://github.com/postgis/postgis-workshops/tree/master/postgis-intro/sources/en/joins.rst)
-#### [14. Spatial Joins Exercises](https://github.com/postgis/postgis-workshops/tree/master/postgis-intro/sources/en/joins_exercises.rst)
+#### [13. Spatial Joins](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/joins.rst)
+#### [14. Spatial Joins Exercises](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/joins_exercises.rst)
 - What subway stations are in ‘East Village’? What subway route is it on?
 - What are all the neighborhoods served by the 4-train?
 - How many people live in the Financial District'
