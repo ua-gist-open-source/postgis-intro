@@ -15,7 +15,9 @@ Copy  your answers in a new file named `ANSWERS.md` and commit to a new branch n
 *Extra credit opportunity*
 +10 points if you use Markdown and put your answers in [Fenced Code Blocks](https://www.markdownguide.org/extended-syntax/#fenced-code-blocks) while leaving the questions in a different format.
 
-## Install PostgreSQL and PostGIS
+## Installing PostgreSQL and PostGIS
+
+If you are remote or you want to set this up on your home machine:
 
 Install both Postresql and PostGIS. There are various options for installing these. As open source projects with 
 potential many different extensions and customizations, a number of companies and organizations bundle their
@@ -24,9 +26,6 @@ though I do recommend two different options for Windows and Mac users:
 
 - PostreSQL: https://www.postgresql.org
 - PostGIS: https://postgis.net
-
-## Install pgAdmin 
-Download and install pgAdmin from https://www.pgadmin.org/download/
 
 ### Windows
 Windows Users install https://www.enterprisedb.com/downloads/postgres-postgresql-downloads. Make sure to run 
@@ -45,6 +44,15 @@ To have launchd start postgresql now and restart at login:
 Or, if you don't want/need a background service you can just run:
   pg_ctl -D /usr/local/var/postgres start
 ```
+
+## Install pgAdmin 
+Download and install pgAdmin from https://www.pgadmin.org/download/
+
+## Connect to database
+Open pgAdmin. It may prompt you to set a master password. Set it to `sal2019`.
+
+Connect to the local Postgresql 9.6 database by Expanding `Servers` and clicking on `PostgreSQL 9.6`. When you click on the 
+database name it will open a connection. 
 
 ## Exercises
 We are going to follow some exercises from a workshop. The workshop uses a slightly different setup so we are going to jump
