@@ -71,3 +71,5 @@ work our way through Sections 1 through 14, sipping Section 3, since we already 
 17. What are all the neighborhoods served by the 4-train?
 18. How many people live in the Financial District'
 19. What are the population densities (people / km^2) of the ‘East Village’ and ‘West Village?
+
+[![DOI](https://zenodo.org/badge/180710717.svg)](https://zenodo.org/badge/latestdoi/180710717)
