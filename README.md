@@ -16,6 +16,8 @@ and figure out how to answer the question by tweaking the workshop questions.
 
 Copy  your answers in a new file named `answers.md` and commit to a new branch named `postgis`. When you are done, submit a PR to merge with master and send a slack message to the instructor. 
 
+## Data
+Data is available from [http://s3.cleverelephant.ca/postgis-workshop-2018.zip](http://s3.cleverelephant.ca/postgis-workshop-2018.zip). Download this and the tutorial will walk you through adding this to your PostGIS Database.
 
 ## Connect to database
 Open pgAdmin. It may prompt you to set a master password. Set it to `sal2019`.
