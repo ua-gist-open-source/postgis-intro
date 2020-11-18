@@ -38,23 +38,29 @@ Open the "Query Tool" in pgAdmin. You will be writing SQL in the `Query Editor` 
 
 [http://postgis.net/workshops/postgis-intro/](https://github.com/ua-gist415-master/postgis-workshops/blob/master/postgis-intro/sources/en/index.rst)
 
-#### [1. Welcome](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/welcome.rst)
-#### [2. Introduction](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/introduction.rst)
-#### 3. SKIP (You already did this)
-#### [4. Creating a Spatial Database]
+### [1. Welcome](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/welcome.rst)
+### [2. Introduction](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/introduction.rst)
+### 4. Creating a Spatial Database (pgAdmin or docker)
+#### Instructions for creating spatial database using the pgadmin GUI:
+Right click on "Databases" and create a new database named "nyc". Connect to the database and open the Query Tool. Makesure you are connected to the newly created "nyc" database. In the Query Editor, type:
+```
+CREATE EXTENSION postgis;
+```
+and click on the black triangle "Play" button.
 
+#### Alternative for creating spatial database using docker:
 ```
 docker run --link postgis:postgres --rm -v $HOME/Downloads/postgis-workshop-2018/data:/data mdillon/postgis sh -c 'psql -h "$POSTGRES_PORT_5432_TCP_ADDR" -p $POSTGRES_PORT_5432_TCP_PORT -U postgres -c "CREATE DATABASE nyc"'
 
-bash-3.2$ docker run --link postgis:postgres --rm -v $HOME/Downloads/postgis-workshop-2018/data:/data mdillon/postgis sh -c 'psql -h "$POSTGRES_PORT_5432_TCP_ADDR" -p $POSTGRES_PORT_5432_TCP_PORT -U postgres -d nyc -c "CREATE EXTENSION postgis"'
+docker run --link postgis:postgres --rm -v $HOME/Downloads/postgis-workshop-2018/data:/data mdillon/postgis sh -c 'psql -h "$POSTGRES_PORT_5432_TCP_ADDR" -p $POSTGRES_PORT_5432_TCP_PORT -U postgres -d nyc -c "CREATE EXTENSION postgis"'
 ```
 
-#### 5. Loading spatial data
+### 5. Loading spatial data (docker)
 Since we are using docker for our postgis and don't have PostGIS installed locally, we are missing a nifty tool for importing shapefiles into PostGIS. But we can work around it using docker principles.
 
 Importing shapefiles into PostGIS is a two-step process. The first step is to use the `shp2pgsql` tool to create SQL scripts that will create the relevant tables and populate them with data. Note that this only creates the _SQL_ files and doesn't actually update the database itself.
 
-From you shell (Terminal or Powershell), Substituting the full path for the unzipped data directory from the NYC sample data (e.g., i.e., instead of `$HOME/Downloads/postgis-workshop-2018/data` it may be `C:/Users/Aaryno/Downloads/postgis-workshop-2018/data`
+From your shell (Terminal or Powershell), Substituting the full path for the unzipped data directory from the NYC sample data (e.g., i.e., instead of `$HOME/Downloads/postgis-workshop-2018/data` it may be `C:/Users/Aaryno/Downloads/postgis-workshop-2018/data`
 
 ```
 docker run -it --link postgis:postgres --rm -v $HOME/Downloads/postgis-workshop-2018/data:/data mdillon/postgis sh -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_census_blocks.shp public.nyc_census_blocks
@@ -91,9 +97,8 @@ Ok, now maybe it's perhaps worthwhile to deconstruct _that_^ long command.
   - `-h "$POSTGRES_PORT_5432_TCP_ADDR"` - the host to connect to. The `$POSTGRES_PORT_5432_TCP_ADDR` variable is a special variable that tells this container how to connect to the database and was made accessible when we added the `--link` command to the `docker run` command.
   - `-p "$POSTGRES_PORT_5432_TCP_PORT"` - the 5432 port for the linked container 
   - `-U postgres` - the database user to connect as
-```
 
-Do the same for all the NYC workshop shapefiles:
+Do the same for all the NYC workshop shapefiles (This includes ALL of them, so if you've already added `nyc_census_blocks` above, skip the first line below:
 ```
 docker run --link postgis:postgres --rm -v $HOME/Downloads/postgis-workshop-2018/data:/data mdillon/postgis sh -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_census_blocks.shp public.nyc_census_blocks | psql -h "$POSTGRES_PORT_5432_TCP_ADDR" -p $POSTGRES_PORT_5432_TCP_PORT -U postgres'
 
@@ -107,16 +112,24 @@ docker run --link postgis:postgres --rm -v $HOME/Downloads/postgis-workshop-2018
 
 ```
 
-#### [6. About our data](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/about_data.rst)
-#### [7. Simple SQL](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/simple_sql.rst)
-#### [8. Simple SQL Exercises](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/simple_sql_exercises.rst)
+_For the rest of the assignment you can use the Query Editor in pgAdmin or, if you are up to the task, use `psql` from within docker`_:
+
+#### docker command to allow `psql` connection to the postgis database:
+```
+docker run -it --rm --link postgis:postgres sh -c 'psql -h "$POSTGRES_PORT_5432_TCP_ADDR" -p $POSTGRES_PORT_5432_TCP_PORT -U postgres'
+```
+Note we don't need to connect the volume since we don't need the shapefiles any more but we _do_ need the link and link variables.
+
+### [6. About NYC workshop data](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/about_data.rst)
+### [7. Simple SQL](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/simple_sql.rst)
+### [8. Simple SQL Exercises](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/simple_sql_exercises.rst)
 
 1. What is the *Asian* population of the City of New York?
 2. What is the population of *Manhattan*?
 3. For each borough, what percentage of the population is *black*?
 
-#### [9. Geometries](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/geometries.rst)
-#### [10. Geometry Exercises](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/geometries_exercises.rst)
+### [9. Geometries](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/geometries.rst)
+### [10. Geometry Exercises](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/geometries_exercises.rst)
 
 4. What is the area of the *‘New Brighton’* neighborhood?
 5. What is the area of the *Bronx* in acres?
@@ -127,15 +140,15 @@ docker run --link postgis:postgres --rm -v $HOME/Downloads/postgis-workshop-2018
 10. How many polygons are in the ‘Coney Island’ multipolygon?
 11. What are the 5 longest roads in NYC?
 
-#### [11. Spatial Relationships](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/spatial_relationships.rst)
-#### [12. Spatial Relationships Exercises](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/spatial_relationships_exercises.rst)
+### [11. Spatial Relationships](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/spatial_relationships.rst)
+### [12. Spatial Relationships Exercises](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/spatial_relationships_exercises.rst)
 12. What is the geometry value for the street named ‘S Oxford St’?
 13. What neighborhood and borough is S Oxford St in?
 14. What streets does S Oxford St join with?
 15. Approximately how many people live on (within 50 meters of) S Oxford St?
 
-#### [13. Spatial Joins](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/joins.rst)
-#### [14. Spatial Joins Exercises](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/joins_exercises.rst)
+### [13. Spatial Joins](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/joins.rst)
+### [14. Spatial Joins Exercises](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/joins_exercises.rst)
 16. What subway stations are in ‘East Village’? What subway route is it on?
 17. What are all the neighborhoods served by the 4-train?
 18. How many people live in the Financial District'
