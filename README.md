@@ -74,7 +74,7 @@ ANALYZE "public"."nyc_census_blocks";
 That's the output of `shp2pgsql`. It's SQL and can be run in PostgreSQL to create the appropriate spatial table for `nyc_census_blocks`. To do that we will use another command line utility for interacting with postgres databases, `psql`. We will use the Unix pipe (`|`) operator to "pipe" the SQL from that command into the database as input and have the database create the table and insert the rows:
 
 ```
-docker run --link postgis:postgres --rm -v $HOME/Downloads/postgis-workshop-2018/data:/data mdillon/postgis sh -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_census_blocks.shp public.nyc_census_blocks | psql -h "$POSTGRES_PORT_5432_TCP_ADDR" -p $POSTGRES_PORT_5432_TCP_PORT -U postgres'
+docker run --link postgis:postgres --rm -v $HOME/Downloads/postgis-workshop-2018/data:/data mdillon/postgis sh -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_census_blocks.shp public.nyc_census_blocks | psql -h "$POSTGRES_PORT_5432_TCP_ADDR" -p $POSTGRES_PORT_5432_TCP_PORT -U postgres -d nyc'
 ```
 
 It's worth breaking down exactly what docker is doing here with the arguments after `run`. First, note that when we `docker run...` it is launching a _new_ container. It just _happens_ to be the same type as the `mdillon/postgis` container that is listening on port 5432. But docker separates the containers so they don't know each other. However, we _want_ this new container to know about the server so we will "link" it. 
@@ -82,7 +82,7 @@ It's worth breaking down exactly what docker is doing here with the arguments af
 - `--rm` - tells docker to remove the container after it finishes.
 - `-v $HOME/Downloads/postgis-workshop-2018/data:/data` - should be familiar; this maps a local directory to a docker directory
 - 'mdillon/postgis' - this is the container we are running
-- `sh -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_census_blocks.shp public.nyc_census_blocks | psql -h "$POSTGRES_PORT_5432_TCP_ADDR" -p $POSTGRES_PORT_5432_TCP_PORT -U postgres'` -- This is the command we are running in our container...
+- `sh -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_census_blocks.shp public.nyc_census_blocks | psql -h "$POSTGRES_PORT_5432_TCP_ADDR" -p $POSTGRES_PORT_5432_TCP_PORT -U postgres -d nyc'` -- This is the command we are running in our container...
 
 Ok, now maybe it's perhaps worthwhile to deconstruct _that_^ long command.
 - `sh -c` means to execute what's comming next in a shell.
@@ -114,9 +114,9 @@ docker run --link postgis:postgres --rm -v $HOME/Downloads/postgis-workshop-2018
 
 _For the rest of the assignment you can use the Query Editor in pgAdmin or, if you are up to the task, use `psql` from within docker`_:
 
-#### docker command to allow `psql` connection to the postgis database:
+#### docker command to allow `psql` connection to the postgis database in interactive mode:
 ```
-docker run -it --rm --link postgis:postgres --entrypoint sh mdillon/postgis -c 'psql -h "$POSTGRES_PORT_5432_TCP_ADDR" -p $POSTGRES_PORT_5432_TCP_PORT -U postgres'
+docker run -it --rm --link postgis:postgres --entrypoint sh mdillon/postgis -c 'psql -h $POSTGRES_PORT_5432_TCP_ADDR -p $POSTGRES_PORT_5432_TCP_PORT -U postgres -d nyc'
 ```
 Note we don't need to connect the volume since we don't need the shapefiles any more but we _do_ need the link and link variables.
 
