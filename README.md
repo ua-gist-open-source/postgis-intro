@@ -21,12 +21,12 @@ Data is available from [http://s3.cleverelephant.ca/postgis-workshop-2018.zip](h
 
 ## Start database locally from docker
 ```
-docker run --name postgis -d -v $HOME/postgres_data:/var/lib/postgresql -p 5432:5432 mdillon/postgis
+docker run -d --name postgis -v $HOME/postgres_data/data:/var/lib/postgresql/data -p 25432:5432 mdillon/postgis
 ```
 ## Connect to database
 Open pgAdmin. It may prompt you to set a master password. Set it to `postgres` and don't forget it. That's a password to access your pgAdmin GUI.
 
-Connect to the local Postgresql database by Expanding `Servers` and clicking on `localhost:5432` (it should be the only one and may be named slightly differently). When you click on the  database name it will open a connection and the icon will change from a silver platter with a red "x" to a golden platter. 
+Connect to the local Postgresql database by Expanding `Servers` and clicking on `localhost:25432` (it should be the only one and may be named slightly differently). When you click on the  database name it will open a connection and the icon will change from a silver platter with a red "x" to a golden platter. 
 
 ## Exercises
 We are going to follow some exercises from a workshop. The workshop uses a slightly different setup so we are going to jump
@@ -50,9 +50,8 @@ and click on the black triangle "Play" button.
 
 #### Alternative for creating spatial database using docker:
 ```
-docker run --link postgis:postgres --rm -v $HOME/Downloads/postgis-workshop-2018/data:/data mdillon/postgis sh -c 'psql -h "$POSTGRES_PORT_5432_TCP_ADDR" -p $POSTGRES_PORT_5432_TCP_PORT -U postgres -c "CREATE DATABASE nyc"'
-
-docker run --link postgis:postgres --rm -v $HOME/Downloads/postgis-workshop-2018/data:/data mdillon/postgis sh -c 'psql -h "$POSTGRES_PORT_5432_TCP_ADDR" -p $POSTGRES_PORT_5432_TCP_PORT -U postgres -d nyc -c "CREATE EXTENSION postgis"'
+docker exec postgis sh -c 'psql -U postgres -c "CREATE DATABASE nyc"'
+docker exec postgis sh -c 'psql -U postgres -d nyc -c "CREATE EXTENSION postgis"'
 ```
 
 ### 5. Loading spatial data (docker)
@@ -116,9 +115,9 @@ _For the rest of the assignment you can use the Query Editor in pgAdmin or, if y
 
 #### docker command to allow `psql` connection to the postgis database in interactive mode:
 ```
-docker run -it --rm --link postgis:postgres --entrypoint sh mdillon/postgis -c 'psql -h $POSTGRES_PORT_5432_TCP_ADDR -p $POSTGRES_PORT_5432_TCP_PORT -U postgres -d nyc'
+docker exec -it postgis sh -c 'psql -U postgres -d nyc'
 ```
-Note we don't need to connect the volume since we don't need the shapefiles any more but we _do_ need the link and link variables.
+Note we don't need to connect the volume since we don't need the shapefiles any more so we can actually connect right to the database container.
 
 ### [6. About NYC workshop data](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/about_data.rst)
 ### [7. Simple SQL](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/simple_sql.rst)
