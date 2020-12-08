@@ -17,16 +17,42 @@ and figure out how to answer the question by tweaking the workshop questions.
 Copy  your answers in a new file named `answers.md` and commit to a new branch named `postgis`. When you are done, submit a PR to merge with master and send a slack message to the instructor. 
 
 ## Data
-Data is available from [http://s3.cleverelephant.ca/postgis-workshop-2018.zip](http://s3.cleverelephant.ca/postgis-workshop-2018.zip). Download this and the tutorial will walk you through adding this to your PostGIS Database.
+Data is available from [http://s3.cleverelephant.ca/postgis-workshop-2018.zip](http://s3.cleverelephant.ca/postgis-workshop-2018.zip). Download this and the tutorial will walk you through adding this to your PostGIS Database. 
 
-## Start database locally from docker
+Note that this directory could literally be anyway on your system and has nothing to do with the geoserver data directory or the postgis data directory. In fact, you can leave it in your Downloads folder. In the commands below, I have referred to the location on my local machine as `$HOME/Downloads` but yours may be different. 
+
+You will need to unzip the file in order to import the shapefiles.
+
+## Create a `gist604b` network for your containers to run in
+From here until the end of the semester we are going to be working with multiple docker containers at a time. In this assignment we will be running two:
+- the postgis database
+- an import container that populates the database from the workshop shapefile data
+By default, containers running in docker are isolated from each other. In order to allow them to communicate, we need to create a network to bridge them. Read up here:
+https://docs.docker.com/network/bridge/
+
+```
+docker network create gist604b
+```
+
+## Connect database to the `gist604b` network
+You created the `postgis` container previously but it is not configured with that network. We can simply:
+```
+docker network connect gist604b postgis
+```
+This will connect that container even if it is not running. If you have stopped the container, you can bring it up with:
+```
+docker start postgis
+```
+If you do not have that container and get an error like `Error: failed to start containers: postgis`, then start a new container with:
 ```
 docker run -d --name postgis -v $HOME/postgres_data/data:/var/lib/postgresql/data -p 25432:5432 mdillon/postgis
 ```
+Verify that the postgis container is available on the `gist604b` network by trying to connect from a new container on the same network. The command below runs a container that can connect to the database and issues a simple SQL query to check that it works:
+```
+docker run --network gist604b mdillon/postgis psql -h postgis -U postgres -c "select 1;"
+```
 ## Connect to database
-Open pgAdmin. It may prompt you to set a master password. Set it to `postgres` and don't forget it. That's a password to access your pgAdmin GUI.
-
-Connect to the local Postgresql database by Expanding `Servers` and clicking on `localhost:25432` (it should be the only one and may be named slightly differently). When you click on the  database name it will open a connection and the icon will change from a silver platter with a red "x" to a golden platter. 
+Open pgAdmin and verify that you can still connect to the database. If it's still connected from a previous session, right click on the `localhost:25432` Server and select `Refresh`.
 
 ## Exercises
 We are going to follow some exercises from a workshop. The workshop uses a slightly different setup so we are going to jump
@@ -62,7 +88,7 @@ Importing shapefiles into PostGIS is a two-step process. The first step is to us
 From your shell (Terminal or Powershell), Substituting the full path for the unzipped data directory from the NYC sample data (e.g., i.e., instead of `$HOME/Downloads/postgis-workshop-2018/data` it may be `C:/Users/Aaryno/Downloads/postgis-workshop-2018/data`
 
 ```
-docker run -it --link postgis:postgres --rm -v $HOME/Downloads/postgis-workshop-2018/data:/data mdillon/postgis sh -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_census_blocks.shp public.nyc_census_blocks
+docker run -it --network gist604b --rm -v $HOME/Downloads/postgis-workshop-2018/data:/data mdillon/postgis sh -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_census_blocks.shp public.nyc_census_blocks
 ```
 You should see a LOT of SQL along the lines of:
 ```
@@ -73,15 +99,15 @@ ANALYZE "public"."nyc_census_blocks";
 That's the output of `shp2pgsql`. It's SQL and can be run in PostgreSQL to create the appropriate spatial table for `nyc_census_blocks`. To do that we will use another command line utility for interacting with postgres databases, `psql`. We will use the Unix pipe (`|`) operator to "pipe" the SQL from that command into the database as input and have the database create the table and insert the rows:
 
 ```
-docker run --link postgis:postgres --rm -v $HOME/Downloads/postgis-workshop-2018/data:/data mdillon/postgis sh -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_census_blocks.shp public.nyc_census_blocks | psql -h "$POSTGRES_PORT_5432_TCP_ADDR" -p $POSTGRES_PORT_5432_TCP_PORT -U postgres -d nyc'
+docker run --network gist604b postgis:postgres --rm -v $HOME/Downloads/postgis-workshop-2018/data:/data mdillon/postgis sh -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_census_blocks.shp public.nyc_census_blocks | psql -h postgis -U postgres -d nyc'
 ```
 
 It's worth breaking down exactly what docker is doing here with the arguments after `run`. First, note that when we `docker run...` it is launching a _new_ container. It just _happens_ to be the same type as the `mdillon/postgis` container that is listening on port 5432. But docker separates the containers so they don't know each other. However, we _want_ this new container to know about the server so we will "link" it. 
-- `--link postgis:postgres` - this allows this new container that we are running to know about our main postgis database
+- `--network gist604b` - this allows this new container that we are running to know about our main postgis database because we will connect to the same network
 - `--rm` - tells docker to remove the container after it finishes.
 - `-v $HOME/Downloads/postgis-workshop-2018/data:/data` - should be familiar; this maps a local directory to a docker directory
 - 'mdillon/postgis' - this is the container we are running
-- `sh -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_census_blocks.shp public.nyc_census_blocks | psql -h "$POSTGRES_PORT_5432_TCP_ADDR" -p $POSTGRES_PORT_5432_TCP_PORT -U postgres -d nyc'` -- This is the command we are running in our container...
+- `sh -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_census_blocks.shp public.nyc_census_blocks | psql -h postgis -U postgres -d nyc'` -- This is the command we are running in our container...
 
 Ok, now maybe it's perhaps worthwhile to deconstruct _that_^ long command.
 - `sh -c` means to execute what's comming next in a shell.
@@ -92,26 +118,25 @@ Ok, now maybe it's perhaps worthwhile to deconstruct _that_^ long command.
   - `/data/nyc_census_blocks.shp` - the shapefile to read. Note this is in the docker path internal to this container, not our local workstation path.
   - `public.nyc_census_blocks` is the table to create and insert these into (i.e., the 'public' schema and the 'nyc_census_blocks' table)
 - `|` - the "pipe" operator takes the output of the previous command (`shp2pgsql`, which output a bunch of SQL) and redirects it as input the the next command below
-- `psql -h "$POSTGRES_PORT_5432_TCP_ADDR" -p $POSTGRES_PORT_5432_TCP_PORT -U postgres` - command that takes the input (SQL) and executes it on a postgres database
-  - `-h "$POSTGRES_PORT_5432_TCP_ADDR"` - the host to connect to. The `$POSTGRES_PORT_5432_TCP_ADDR` variable is a special variable that tells this container how to connect to the database and was made accessible when we added the `--link` command to the `docker run` command.
-  - `-p "$POSTGRES_PORT_5432_TCP_PORT"` - the 5432 port for the linked container 
+- `psql -h postgis -U postgres` - command that takes the input (SQL) and executes it on a postgres database
+  - `-h postgis` - the host to connect to. That comes from the `--name` parameter when we did our `docker run` for the main postgis database.
   - `-U postgres` - the database user to connect as
 
 Do the same for all the NYC workshop shapefiles (This includes ALL of them, so if you've already added `nyc_census_blocks` above, skip the first line below:
 ```
-docker run --link postgis:postgres --rm -v $HOME/Downloads/postgis-workshop-2018/data:/data --entrypoint sh mdillon/postgis -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_census_blocks.shp public.nyc_census_blocks | psql -h $POSTGRES_PORT_5432_TCP_ADDR -p $POSTGRES_PORT_5432_TCP_PORT -U postgres -d nyc'
+docker run --rm --network gist604b -v $HOME/Downloads/postgis-workshop-2018/data:/data --entrypoint sh mdillon/postgis -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_census_blocks.shp public.nyc_census_blocks | psql -h postgis  -U postgres -d nyc'
 
-docker run --link postgis:postgres --rm -v $HOME/Downloads/postgis-workshop-2018/data:/data --entrypoint sh mdillon/postgis -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_homicides.shp public.nyc_homicides | psql -h $POSTGRES_PORT_5432_TCP_ADDR -p $POSTGRES_PORT_5432_TCP_PORT -U postgres -d nyc'
+docker run --rm --network gist604b -v $HOME/Downloads/postgis-workshop-2018/data:/data --entrypoint sh mdillon/postgis -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_homicides.shp public.nyc_homicides | psql -h postgis -U postgres -d nyc'
 
-docker run --link postgis:postgres --rm -v $HOME/Downloads/postgis-workshop-2018/data:/data --entrypoint sh mdillon/postgis -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_neighborhoods.shp public.nyc_neighborhoods | psql -h $POSTGRES_PORT_5432_TCP_ADDR -p $POSTGRES_PORT_5432_TCP_PORT -U postgres -d nyc'
+docker run --rm --network gist604b -v $HOME/Downloads/postgis-workshop-2018/data:/data --entrypoint sh mdillon/postgis -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_neighborhoods.shp public.nyc_neighborhoods | psql -h postgis  -U postgres -d nyc'
 
-docker run --link postgis:postgres --rm -v $HOME/Downloads/postgis-workshop-2018/data:/data --entrypoint sh mdillon/postgis -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_streets.shp public.nyc_streets | psql -h $POSTGRES_PORT_5432_TCP_ADDR -p $POSTGRES_PORT_5432_TCP_PORT -U postgres -d nyc'
+docker run --rm --network gist604b -v $HOME/Downloads/postgis-workshop-2018/data:/data --entrypoint sh mdillon/postgis -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_streets.shp public.nyc_streets | psql -h postgis  -U postgres -d nyc'
 
-docker run --link postgis:postgres --rm -v $HOME/Downloads/postgis-workshop-2018/data:/data --entrypoint sh mdillon/postgis -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_subway_stations.shp public.nyc_subway_stations | psql -h $POSTGRES_PORT_5432_TCP_ADDR -p $POSTGRES_PORT_5432_TCP_PORT -U postgres -d nyc'
+docker run --rm --network gist604b -v $HOME/Downloads/postgis-workshop-2018/data:/data --entrypoint sh mdillon/postgis -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_subway_stations.shp public.nyc_subway_stations | psql -h postgis  -U postgres -d nyc'
 
 ```
 
-_For the rest of the assignment you can use the Query Editor in pgAdmin or, if you are up to the task, use `psql` from within docker`_:
+_For the rest of the assignment you can use the Query Editor in pgAdmin or, if you are up to the task, use `psql` from within docker:_
 
 #### docker command to allow `psql` connection to the postgis database in interactive mode:
 ```
