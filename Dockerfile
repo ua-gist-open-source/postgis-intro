@@ -8,9 +8,9 @@ ENV DB_PASSWORD postgres
 ENV DB_HOST postgis
 ENV DB_PORT 5432
 
-COPY scripts /
+COPY scripts/populate_nyc.sh /populate_nyc.sh
 
-RUN chmod 755 /populate_nyc
+RUN chmod 755 /populate_nyc.sh
 
 CMD ["/populate_nyc.sh"]
 
