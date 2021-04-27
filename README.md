@@ -12,21 +12,33 @@ Create a new branch named `postgis` and submit a `pull request` to merge with ma
 PostGIS is an extension to the open source database, PostgreSQL. PostgreSQL, or “postgres”, is released under a special license called the “PostgreSQL License”, which is similar to the BSD or MIT license. PostGIS is released under the GNU General Public License (v2 or later).
 
 ## Assignment
-Install Postgresql, PostGIS, and pgAdmin. Follow the tutorials linked below and answer the questions listed in this README.md.
-These questions are slight variations on the exercise questions listed in the workshop materials. Read carefully
+Install pgAdmin and connect to your PostgreSQL/PostGIS instance. Follow the tutorials linked below and answer the questions listed in this README.md. These questions are slight variations on the exercise questions listed in the workshop materials. Read carefully
 and figure out how to answer the question by tweaking the workshop questions.
 
 Copy  your answers in a new file named `answers.md` and commit to a new branch named `postgis`. When you are done, submit a PR to merge with master and send a slack message to the instructor. 
 
 ## Data
-Data is available from [http://s3.cleverelephant.ca/postgis-workshop-2018.zip](http://s3.cleverelephant.ca/postgis-workshop-2018.zip). Download this and the tutorial will walk you through adding this to your PostGIS Database. 
+Data is available from [d2l](https://d2l.arizona.edu/d2l/le/content/1023359/viewContent/10441716/View). Download this and the tutorial will walk you through adding this to your PostGIS Database. 
 
 Note that this directory could literally be anyway on your system and has nothing to do with the geoserver data directory or the postgis data directory. In fact, you can leave it in your Downloads folder. In the commands below, I have referred to the location on my local machine as `$HOME/Downloads` but yours may be different. 
 
 You will need to unzip the file in order to import the shapefiles.
 
-## Connect to database
-Open pgAdmin and verify that you can still connect to the database. If it's still connected from a previous session, right click on the `localhost:25432` Server and select `Refresh`.
+## Connect to database with pgAdmin
+Open pgAdmin and add a new connection. 
+- In the Browser pane, Right click on `Servers` and select `Create` -> `Server`
+- In the dialog, give it a name `localhost` (though any name will do), then switch to the `Connection` tab
+- In the dialog, in the `Connection` tab, enter the following:
+  - `Host name/address`: `localhost`
+  - `Port`: `15432`
+  - `Username`: `postgres`
+  - `Password`: `postgres`
+  - `Save password?`: Check yes
+  - Everthing else can be left alone.
+- `Save`
+
+## Create a new database and import NYC workshop data
+In the Browser pane, expand `Servers` -> `localhost` and right click on `Databases` and select `Create database`. Name it `nyc`.
 
 ## Exercises
 We are going to follow some exercises from a workshop. The workshop uses a slightly different setup so we are going to jump
@@ -49,9 +61,11 @@ CREATE EXTENSION postgis;
 and click on the black triangle "Play" button.
 
 #### Alternative for creating spatial database using docker:
+Your postgis container has a long name since it was started by docker-compose. Type `docker ps` to see the full name. It will be something like `5-1-docker-compose-aaryno_postgis_1`. I've used my docker container in the example below:
+
 ```
-docker exec postgis sh -c 'psql -U postgres -c "CREATE DATABASE nyc"'
-docker exec postgis sh -c 'psql -U postgres -d nyc -c "CREATE EXTENSION postgis"'
+docker exec 5-1-docker-compose-aaryno_postgis_1 sh -c 'psql -U postgres -c "CREATE DATABASE nyc"'
+docker exec 5-1-docker-compose-aaryno_postgis_1 sh -c 'psql -U postgres -d nyc -c "CREATE EXTENSION postgis"'
 ```
 
 ### 5. Loading spatial data (docker)
@@ -62,7 +76,7 @@ Importing shapefiles into PostGIS is a two-step process. The first step is to us
 From your shell (Terminal or Powershell), Substituting the full path for the unzipped data directory from the NYC sample data (e.g., i.e., instead of `$HOME/Downloads/postgis-workshop-2018/data` it may be `C:/Users/Aaryno/Downloads/postgis-workshop-2018/data`
 
 ```
-docker run -it --network gist604b --rm -v $HOME/Downloads/postgis-workshop-2018/data:/data mdillon/postgis sh -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_census_blocks.shp public.nyc_census_blocks
+docker run -it --network gist604b --rm -v $HOME/Downloads/postgis-workshop-2018/data:/data mdillon/postgis sh -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_census_blocks.shp public.nyc_census_blocks'
 ```
 You should see a LOT of SQL along the lines of:
 ```
