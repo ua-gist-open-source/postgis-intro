@@ -1,6 +1,8 @@
 # Introduction to PostGIS
 ## Prerequisites
 - Docker installed
+- Docker running with PostGIS (the previous assignment with Docker Compose can be running with `docker-compose up -d`).
+- Install PgAdmin ([download here](https://www.pgadmin.org/))
 
 ## Deliverables
 Create a new branch named `postgis` and submit a `pull request` to merge with master. Your branch should contain answers to the questions in this README in a separate file named 
@@ -23,34 +25,6 @@ Note that this directory could literally be anyway on your system and has nothin
 
 You will need to unzip the file in order to import the shapefiles.
 
-## Create a `gist604b` network for your containers to run in
-From here until the end of the semester we are going to be working with multiple docker containers at a time. In this assignment we will be running two:
-- the postgis database
-- an import container that populates the database from the workshop shapefile data
-By default, containers running in docker are isolated from each other. In order to allow them to communicate, we need to create a network to bridge them. Read up here:
-https://docs.docker.com/network/bridge/
-
-```
-docker network create gist604b
-```
-
-## Connect database to the `gist604b` network
-You created the `postgis` container previously but it is not configured with that network. We can simply:
-```
-docker network connect gist604b postgis
-```
-This will connect that container even if it is not running. If you have stopped the container, you can bring it up with:
-```
-docker start postgis
-```
-If you do not have that container and get an error like `Error: failed to start containers: postgis`, then start a new container with:
-```
-docker run -d --name postgis -v $HOME/postgres_data/data:/var/lib/postgresql/data -p 25432:5432 mdillon/postgis
-```
-Verify that the postgis container is available on the `gist604b` network by trying to connect from a new container on the same network. The command below runs a container that can connect to the database and issues a simple SQL query to check that it works:
-```
-docker run --network gist604b mdillon/postgis psql -h postgis -U postgres -c "select 1;"
-```
 ## Connect to database
 Open pgAdmin and verify that you can still connect to the database. If it's still connected from a previous session, right click on the `localhost:25432` Server and select `Refresh`.
 
