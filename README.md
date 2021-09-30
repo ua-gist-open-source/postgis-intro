@@ -61,11 +61,11 @@ CREATE EXTENSION postgis;
 and click on the black triangle "Play" button.
 
 #### Alternative for creating spatial database using docker:
-Your postgis container has a long name since it was started by docker-compose. Type `docker ps` to see the full name. It will be something like `5-1-docker-compose-aaryno_postgis_1`. I've used my docker container in the example below:
+Your postgis container has a long name since it was started by docker-compose. Type `docker ps` to see the full name. It will be something like `4-1-docker-compose-aaryno_postgis_1`. I've used my docker container in the example below:
 
 ```
-docker exec 5-1-docker-compose-aaryno_postgis_1 sh -c 'psql -U postgres -c "CREATE DATABASE nyc"'
-docker exec 5-1-docker-compose-aaryno_postgis_1 sh -c 'psql -U postgres -d nyc -c "CREATE EXTENSION postgis"'
+docker exec 4-1-docker-compose-aaryno_postgis_1 sh -c 'psql -U postgres -c "CREATE DATABASE nyc"'
+docker exec 4-1-docker-compose-aaryno_postgis_1 sh -c 'psql -U postgres -d nyc -c "CREATE EXTENSION postgis"'
 ```
 
 ### 5. Loading spatial data (docker)
