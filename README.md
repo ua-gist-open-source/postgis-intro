@@ -24,8 +24,23 @@ Note that this directory could be anywhere on your system. In the commands below
 
 You will need to unzip the file in order to import the shapefiles.
 
+## Create a gist604b docker network
+In order for us to run multiple docker containers together it will be convenient for us to create a docker network because, by default, they are isolated in their own sandboxes.
+
+```
+docker network create gist604b
+```
+
+## Restart the database on the gist604 network
+Use `docker ps` and `docker kill` to find and stop any existing docker mdillon/postgis containers. If you have previously created a named postgis container, you may want to also `docker rm postgis` (it won't harm to do this). Then, start it up with two new settings, `--network gist604b` and `--name postgis`:
+
+ ```
+ docker run -d -p 25432:5432 -v /Users/aaryn/postgres_data/data:/var/lib/postgresql/data --network gist604b --name postgis mdillon/postgis
+ ```
+The `--name postgis` will give this container a host name on the network that other containers can use to connect to the database from within the gist604b docker network.
+
 ## Create a new database and import NYC workshop data
-Within pgAdmin4: In the Browser pane, expand `Servers` -> `localhost` and right click on `Databases` and select `Create database`. Name it `nyc`.
+Within pgAdmin4: In the Browser pane, expand `Servers` -> `localhost` (or `VM`) and right click on `Databases` (Connect) and select `Create database`. Name it `nyc`.
 
 ## Exercises
 We are going to follow some exercises from a workshop. The workshop uses a slightly different setup so we are going to jump
@@ -55,7 +70,7 @@ Importing shapefiles into PostGIS is a two-step process. The first step is to us
 From your shell (Terminal or Powershell), Substituting the full path for the unzipped data directory from the NYC sample data (e.g., i.e., instead of `$HOME/Downloads/postgis-workshop-2018/data` it may be `C:/Users/Aaryno/Downloads/postgis-workshop-2018/data`
 
 ```
-docker run -it -v $HOME/Downloads/postgis-workshop-2018/data:/data mdillon/postgis sh -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_census_blocks.shp public.nyc_census_blocks'
+docker run -it --network gist604b -v $HOME/Downloads/postgis-workshop-2018/data:/data mdillon/postgis sh -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_census_blocks.shp public.nyc_census_blocks'
 ```
 You should see a LOT of SQL along the lines of:
 ```
@@ -90,18 +105,23 @@ Ok, now maybe it's perhaps worthwhile to deconstruct _that_^ long command.
 
 Do the same for all the NYC workshop shapefiles (This includes ALL of them, so if you've already added `nyc_census_blocks` above, skip the first line below:
 ```
-docker run --rm -v $HOME/Downloads/postgis-workshop-2018/data:/data --entrypoint sh mdillon/postgis -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_census_blocks.shp public.nyc_census_blocks | psql -h postgis  -U postgres -d nyc'
+docker run --network gist604b -v $HOME/Downloads/postgis-workshop-2018/data:/data --entrypoint sh mdillon/postgis -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_census_blocks.shp public.nyc_census_blocks | psql -h postgis  -U postgres -d nyc'
 
-docker run --rm -v $HOME/Downloads/postgis-workshop-2018/data:/data --entrypoint sh mdillon/postgis -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_homicides.shp public.nyc_homicides | psql -h postgis -U postgres -d nyc'
+docker run --network gist604b -v $HOME/Downloads/postgis-workshop-2018/data:/data --entrypoint sh mdillon/postgis -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_homicides.shp public.nyc_homicides | psql -h postgis -U postgres -d nyc'
 
-docker run --rm -v $HOME/Downloads/postgis-workshop-2018/data:/data --entrypoint sh mdillon/postgis -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_neighborhoods.shp public.nyc_neighborhoods | psql -h postgis  -U postgres -d nyc'
+docker run --network gist604b -v $HOME/Downloads/postgis-workshop-2018/data:/data --entrypoint sh mdillon/postgis -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_neighborhoods.shp public.nyc_neighborhoods | psql -h postgis  -U postgres -d nyc'
 
-docker run --rm -v $HOME/Downloads/postgis-workshop-2018/data:/data --entrypoint sh mdillon/postgis -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_streets.shp public.nyc_streets | psql -h postgis  -U postgres -d nyc'
+docker run --network gist604b -v $HOME/Downloads/postgis-workshop-2018/data:/data --entrypoint sh mdillon/postgis -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_streets.shp public.nyc_streets | psql -h postgis  -U postgres -d nyc'
 
-docker run --rm -v $HOME/Downloads/postgis-workshop-2018/data:/data --entrypoint sh mdillon/postgis -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_subway_stations.shp public.nyc_subway_stations | psql -h postgis  -U postgres -d nyc'
+docker run --network gist604b -v $HOME/Downloads/postgis-workshop-2018/data:/data --entrypoint sh mdillon/postgis -c 'shp2pgsql -s 26918 -c -g geom /data/nyc_subway_stations.shp public.nyc_subway_stations | psql -h postgis  -U postgres -d nyc'
 
 ```
 
+If you run one of those commands twice, it will fail the second time because the table will already exist. This will result in a lot of messages like this:
+```
+ERROR:  current transaction is aborted, commands ignored until end of transaction block
+```
+If you scroll up to the top you can see the first error, which will be diagnostic.
 _For the rest of the assignment you can use the Query Editor in pgAdmin_
 
 ### [6. About NYC workshop data](https://github.com/ua-gist-open-source/postgis-workshops/tree/master/postgis-intro/sources/en/about_data.rst)
