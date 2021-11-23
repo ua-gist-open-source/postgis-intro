@@ -124,16 +124,16 @@ ERROR:  current transaction is aborted, commands ignored until end of transactio
 If you scroll up to the top you can see the first error, which will be diagnostic.
 _For the rest of the assignment you can use the Query Editor in pgAdmin_
 
-### [6. About NYC workshop data](https://github.com/ua-gist-open-source/postgis-workshops/tree/master/postgis-intro/sources/en/about_data.rst)
-### [7. Simple SQL](https://github.com/ua-gist-open-source/postgis-workshops/tree/master/postgis-intro/sources/en/simple_sql.rst)
-### [8. Simple SQL Exercises](https://github.com/ua-gist-open-source/postgis-workshops/tree/master/postgis-intro/sources/en/simple_sql_exercises.rst)
+### [6. About NYC workshop data](https://ua-gist-open-source.github.io/postgis-workshops/postgis-intro/sources/en/build/about_data.html)
+### [7. Simple SQL](https://ua-gist-open-source.github.io/postgis-workshops/postgis-intro/sources/en/build/simple_sql.html)
+### [8. Simple SQL Exercises](https://ua-gist-open-source.github.io/postgis-workshops/postgis-intro/sources/en/build/simple_sql_exercises.html)
 
 1. What is the *Asian* population of the City of New York?
 2. What is the population of *Manhattan*?
 3. For each borough, what percentage of the population is *black*?
 
-### [9. Geometries](https://github.com/ua-gist-open-source/postgis-workshops/tree/master/postgis-intro/sources/en/geometries.rst)
-### [10. Geometry Exercises](https://github.com/ua-gist-open-source/postgis-workshops/tree/master/postgis-intro/sources/en/geometries_exercises.rst)
+### [9. Geometries](https://ua-gist-open-source.github.io/postgis-workshops/postgis-intro/sources/en/build/geometries.html)
+### [10. Geometry Exercises](https://ua-gist-open-source.github.io/postgis-workshops/postgis-intro/sources/en/build/geometries_exercises.html)
 
 4. What is the area of the *‘New Brighton’* neighborhood?
 5. What is the area of the *Bronx* in acres?
@@ -144,15 +144,15 @@ _For the rest of the assignment you can use the Query Editor in pgAdmin_
 10. How many polygons are in the ‘Coney Island’ multipolygon?
 11. What are the 5 longest roads in NYC?
 
-### [11. Spatial Relationships](https://github.com/ua-gist-open-source/postgis-workshops/tree/master/postgis-intro/sources/en/spatial_relationships.rst)
-### [12. Spatial Relationships Exercises](https://github.com/ua-gist-open-source/postgis-workshops/tree/master/postgis-intro/sources/en/spatial_relationships_exercises.rst)
+### [11. Spatial Relationships](https://ua-gist-open-source.github.io/postgis-workshops/postgis-intro/sources/en/build/spatial_relationships.html)
+### [12. Spatial Relationships Exercises](https://ua-gist-open-source.github.io/postgis-workshops/postgis-intro/sources/en/build/spatial_relationships_exercises.html)
 12. What is the geometry value for the street named ‘S Oxford St’?
 13. What neighborhood and borough is S Oxford St in?
 14. What streets does S Oxford St join with?
 15. Approximately how many people live on (within 50 meters of) S Oxford St?
 
-### [13. Spatial Joins](https://github.com/ua-gist415-master/postgis-workshops/tree/master/postgis-intro/sources/en/joins.rst)
-### [14. Spatial Joins Exercises](https://github.com/ua-gist-open-source/postgis-workshops/tree/master/postgis-intro/sources/en/joins_exercises.rst)
+### [13. Spatial Joins](https://ua-gist-open-source.github.io/postgis-workshops/postgis-intro/sources/en/build/joins.html)
+### [14. Spatial Joins Exercises](https://ua-gist-open-source.github.io/postgis-workshops/postgis-intro/sources/en/build/joins_exercises.html)
 16. What subway stations are in ‘East Village’? What subway route is it on?
 17. What are all the neighborhoods served by the 4-train?
 18. How many people live in the Financial District'
