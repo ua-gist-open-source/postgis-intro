@@ -65,6 +65,8 @@ and click on the black triangle "Play" button.
 ### 5. Loading spatial data (docker)
 Since we are using docker for our postgis and don't have PostGIS installed locally, we are missing a nifty tool for importing shapefiles into PostGIS. But we can work around it using docker principles.
 
+*The workshop data is available for download from d2l class website*
+
 Importing shapefiles into PostGIS is a two-step process. The first step is to use the `shp2pgsql` tool to create SQL scripts that will create the relevant tables and populate them with data. Note that this only creates the _SQL_ files and doesn't actually update the database itself.
 
 From your shell (Terminal or Powershell), Substituting the full path for the unzipped data directory from the NYC sample data (e.g., i.e., instead of `$HOME/Downloads/postgis-workshop-2018/data` it may be `C:/Users/Aaryno/Downloads/postgis-workshop-2018/data`
