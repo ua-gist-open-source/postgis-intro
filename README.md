@@ -1,3 +1,4 @@
+[![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-9f69c29eadd1a2efcce9672406de9a39573de1bdf5953fef360cfc2c3f7d7205.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=9226613)
 # Introduction to PostGIS
 
 ## Deliverables
@@ -76,6 +77,12 @@ This will show any postgresql databases you have configured. Of course, you have
   
   ![postgres-explorer-nyc.png](./media/postgres-explorer-nyc.png)
 
+### Enable PostGIS for your `nyc` database
+
+```
+psql -d nyc -c "create extension postgis"
+```
+
 ### Import shapefile data into your `nyc` database
 
 Data for this assignment is available in the [./data](./data) directory and consists of a set of shapefiles:
@@ -89,7 +96,7 @@ We will use a PostGIS utility named `shp2pgsql` to import the shapefiles into yo
 
 In a `Terminal` window, type the following:
 ```
-shp2pgsql -s 26918 -c -g geom /data/nyc_census_blocks.shp public.nyc_census_blocks
+shp2pgsql -s 26918 -c -g geom ./data/nyc_census_blocks.shp public.nyc_census_blocks
 ```
 If all goes well you will see something like this:
 
@@ -128,11 +135,10 @@ Great!
 
 Now do the same thing for the rest of the shapefiles:
 ```
-shp2pgsql -s 26918 -c -g geom data/nyc_census_blocks.shp public.nyc_census_blocks | psql -d nyc
 shp2pgsql -s 26918 -c -g geom data/nyc_census_blocks.shp public.nyc_homicides | psql -d nyc
-shp2pgsql -s 26918 -c -g geom data/nyc_census_blocks.shp public.nyc_neighborhoods | psql -d nyc
-shp2pgsql -s 26918 -c -g geom data/nyc_census_blocks.shp public.nyc_streets | psql -d nyc
-shp2pgsql -s 26918 -c -g geom data/nyc_census_blocks.shp public.nyc_subway_stations | psql -d nyc
+shp2pgsql -s 26918 -c -g geom data/nyc_neighborhoods.shp public.nyc_neighborhoods | psql -d nyc
+shp2pgsql -s 26918 -c -g geom data/nyc_streets.shp public.nyc_streets | psql -d nyc
+shp2pgsql -s 26918 -c -g geom data/nyc_subway_stations.shp public.nyc_subway_stations | psql -d nyc
 ```
 
 ### Open a query browser
