@@ -112,6 +112,8 @@ What just happened? Well, some clues come from the command, which we'll break do
 
 However, the data has notbeen imported into the table yet. The `shp2pgsql` command only creates the SQL for inserting the data and creating the tables. To actually create the tables and insert the data we need to pipe the output into a command that will execute the SQL in the database.
 
+Note that if the output from the previous command is still scrolling, make sure the `Terminal` window is in focus (i.e., click in the window) and hold `CTRL` and `C` down at the same time. `CTRL-C` will cancel the command.
+
 ```
 shp2pgsql -s 26918 -c -g geom data/nyc_census_blocks.shp public.nyc_census_blocks | psql -d nyc
 ```
