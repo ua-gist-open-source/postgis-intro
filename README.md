@@ -42,13 +42,13 @@ We use the term "database" in too many ways in this course. We have used it to d
 
 - `database` contains 1 or more `schema`s contains 0 or more `table`s
 
-For this assignment we are going to create a `database` to store some spatial and tabular data for New York City and we will work through some tutorials with this data. 
+For this assignment we are going to create a `database` to store some spatial and tabular data for New York City and we will work through some tutorials with this data. You may need to wait a minute for the database to start up.
 
 In the Terminal panel, type:
 ```
 psql -c "create database nyc"
 ```
-This will create a new `database` named `nyc`. 
+This will create a new `database` named `nyc`. If you get an error like `error: connection to server at "localhost" (::1), port 5432 failed`, just wait 15 seconds and try again. 
 
 ### Connect to your `nyc` database
 To connect to the `database` we are going to use the provided VSCode `ckolkman.vscode-postgres` extension. Click on the elephant icon in your left menu bar. 
