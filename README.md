@@ -31,7 +31,8 @@ Copy  your answers into a new file named `answers.md` and commit to a new branch
 To start the database, find the `Terminal` window in your codespace and enter:
 
 ```
-docker run -d -p 5432:5432 -v /workspaces/geoserver-intro/postgres_data/data:/var/lib/postgresql/data mdillon/postgis
+docker volume create pg_data
+docker run -d -p 5432:5432 --mount type=volume,src=pg_data,target=/var/lib/postgresql/data mdillon/postgis
 ```
 
 Notice that the port forwarding is between the client (which is your codespace container running in the cloud) and the docker container (which is running in the docker sandbox inside your codespace container running in the cloud). It also creates a volume so you can keep your data if the codespace/docker container restarts
