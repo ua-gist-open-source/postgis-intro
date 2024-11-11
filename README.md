@@ -1,5 +1,7 @@
 # Introduction to PostGIS
 
+**Important: Use the 8-core codespace in this assignment**
+
 ## Deliverables
 Create a new branch named `postgis` and submit a `pull request` to merge with master. Your branch should contain answers to the questions in this README in a separate file named 
 - `answers.md`
